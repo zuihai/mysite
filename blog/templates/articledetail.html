@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ article.title }}
+{% endblock %}
+{% block page-content %}
+    <div class="row">
+        <div class="col s12 m2 l2"></div>
+        <div class="col s12 m8 l8">
+            <div class="card-panel hoverable">
+                <P class="flow-text center">{{ articledetail.title }}</P>
+                <div class="row">
+                    <div class="col s12 m4 l4">
+                        <span class="bold italic">标签:</span>
+                        {% for tags in articledetail.tags.all %}
+                            <a class="chips bold italic" href="#">{{ tags.name }}</a>
+                        {% endfor %}
+                    </div>
+                    <div class="col s12 m4 14" style="text-align: center">
+                        <span class="bold italic">{{ articledetail.modified_time|date:"Y-m-d H:i" }}</span>
+                    </div>
+                    <div class="col s12 m4 14" style="text-align: right">
+                        <span><i style="vertical-align:middle" class="material-icons 1.2rem">visibility</i></span>
+                        <span style="vertical-align:middle">{{ articledetail.views }}</span>
+                    </div>
+                </div>
+                <blockquote><p class="light italic">{{ articledetail.excerpt }}</p></blockquote>
+                <p>{{ articledetail.body|safe }}</p>
+            </div>
+            {#        评论区#}
+            <div class="card-panel hoverable">
+                <p>评论区</p>
+                <form action="{% url 'articlecomment' articledetail.id %}" name="articlecomment" method="post">
+                    {% csrf_token %}
+                    <div class="input-field inline">
+                        <input id="email" name="email" type="email" class="validate">
+                        <label for="email" data-error="email format is wrong" data-success="right">您的邮箱</label>
+                    </div>
+                    <div class="input-field">
+                        <textarea id="textarea1"  name="comment" class="materialize-textarea" length="400"></textarea>
+                        <label for="textarea1">您的内容</label>
+                    </div>
+                    <button class="btn waves-effect waves-light" type="submit" name="action">提交
+                        <i class="material-icons right">send</i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="col s12 m2 l2"></div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}
+    登录
+{% endblock %}
+{% block page-content %}
+    <div class="row">
+        <div class="col s12 m4 l4">
+        </div>
+        <div class="col s12 m4 l4">
+            <form action="{% url 'userlogin' %}" name="userlogin" method="post">
+{#                {% csrf_token %}#}
+                <div class="row">
+                    <div class="input-field col s12">
+                        {% if error %}
+                            <span class="red">{{ error }}</span>
+                        {% endif %}
+                        <input id="uname" name="uname" type="text" class="validate">
+                        <label for="username">用户名</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="password" name="password" type="password" class="validate">
+                        <label for="password">密码</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light right" type="submit" name="action">登录
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col s12 m4 l4"></div>
+    </div>
+{% endblock %}

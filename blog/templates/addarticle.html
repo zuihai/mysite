@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ article.title }}
+{% endblock %}
+{% block page-content %}
+    <form action="{% url 'addarticlesave' %}" name="addarticlesave" method='post'>
+        <div class="row">
+            <div class="col s12 m2 l2 right-align">
+            </div>
+            <div class="col s12 m8 l8">
+                <label>文章标题:</label>
+                <input id="article_title" name="article_title" type="text" class="validate" length="40">
+                <label for="article_title" data-error="标题长度太长!" data-success="right"></label>
+            </div>
+        </div>
+        {#    <hr class="grey lighten-4"/>#}
+        <div class="row">
+            <div class="col s12 m2 l2 right-align">
+            </div>
+            <div class="col s12 m8 l8">
+                <label>文章内容:</label>
+                <textarea id="article_body" name="editor1" class="ckeditor"></textarea>
+                <script type="text/javascript">CKEDITOR.replace('editor', {
+                    customConfig: ''
+                });</script>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m2 l2 right-align">
+            </div>
+            <div class="col s12 m8 l8">
+                <label>分类:</label>
+                {% for category in categorys %}
+                    <input class="with-gap" name="category" type="radio" value="{{ category.id }}"
+                           id="{{ category.id }}"/>
+                    <label for="{{ category.id }}">{{ category.name }}</label>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m2 l2 right-align">
+            </div>
+            <div class="col s12 m8 l8">
+                <label>标签:</label>
+                <div class="chips chips-placeholder"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m2 l2 right-align">
+            </div>
+            <div class="col s12 m8 l8">
+                <label>摘要:</label>
+                <textarea id="article_excerpt" name="article_excerpt" class="materialize-textarea"
+                          length="200"></textarea>
+                <label for="article_excerpt" data-error="摘要太长!" data-success="right"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m2 l2 right-align">
+            </div>
+            <div class="col s12 m8 l8">
+                <label>发布:</label>
+                <div class="switch">
+                    <label>
+                        草稿
+                        <input id="ispublish" name="ispublish" type="checkbox">
+                        <span class="lever"></span>
+                        发布
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m2 l2 right-align">
+            </div>
+            <div class="col s12 m8 l8">
+                <button id='save_article' class="btn waves-effect waves-light" type="button" name="action">保存文章
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </div>
+
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script src="{% static 'ckeditor/ckeditor/plugins/prism/lib/prism/prism_patched.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/prism.css' %}">
+    <script type="text/javascript">
+        $('.chips-placeholder').material_chip({
+            placeholder: 'Enter a tag',
+            secondaryPlaceholder: '+Tag',
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#save_article").click(function () {
+                var title = $("#article_title").val();
+                var body = CKEDITOR.instances['article_body'].getData();
+                var category = $('input:radio[name=category]:checked').val();
+                var tag = $('.chips-placeholder').material_chip('data');
+                var x;
+                var tags = '';
+                for (x in tag) {
+                    tags = tags + tag[x]['tag'] + ','
+                }
+                var excerpt = $("#article_excerpt").val();
+                var ispublish = $('input:checkbox[name=ispublish]:checked').val();
+                $.ajax({
+                    url: "/addarticlesave/",
+                    type: "post",
+                    dataType: "html",
+                    data: {
+                        "title": title,
+                        "body": body,
+                        "category": category,
+                        "tags": tags,
+                        "excerpt": excerpt,
+                        "ispublish": ispublish
+                    }
+                }).success(function (ret) {
+                    if (ret == '保存成功') {
+                        location.replace('/myarticle/')
+                    }
+                    Materialize.toast(ret, 4000)
+                }).fail(function (ret) {
+                    Materialize.toast('请求失败', 4000)
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

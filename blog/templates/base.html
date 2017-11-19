@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href=" {% static 'materialize/css/materialize.min.css' %}"
+          media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Yangdi.FUN {% block title %} {% endblock %}</title>
+    <style type="text/css">
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+    </style>
+
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+<nav class="grey darken-2">
+    <div class="nav-wrapper">
+        <a href="{% url "index" %}" class="brand-logo">Yangdi.Fun</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul class="side-nav" id="mobile-demo">
+            {% if  user.is_authenticated %}
+                <li><a href="#">{{ user.get_username }}</a></li>
+                <li><a href="{% url 'index' %}">公开文章</a></li>
+                <li><a href="{% url 'myarticle' %}">我的文章</a></li>
+                <li><a href="{% url 'addarticle' %}">写文章</a></li>
+                <li><a class="modal-trigger" href="#modalchangopassword">修改密码</a>
+                <li><a href="{% url 'userlogout' %}">退出</a></li>
+            {% else %}
+                <li><a href="{% url 'index' %}">公开文章</a></li>
+                <!-- Modal Trigger -->
+                <li><a class="modal-trigger waves-effect waves-light btn grey darken-2 " href="#modalLogin">登录/注册</a>
+                </li>
+            {% endif %}
+        </ul>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="{% url 'index' %}">公开文章</a></li>
+            {#            <li><a href="{% url 'feeds' %}">心情</a></li>#}
+            {% if  user.is_authenticated %}
+                <li><a href="{% url 'addarticle' %}">写文章</a></li>
+                <li><a class="dropdown-button" href="#!" data-activates="dropdown1">{{ user.get_username }}<i
+                        class="material-icons right">arrow_drop_down</i></a></li>
+            {% else %}
+                <!-- Modal Trigger -->
+                <li><a class="modal-trigger waves-effect waves-light  grey darken-2 " href="#modalLogin">登录/注册</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<!-- 登录后的下拉项目 -->
+<ul id="dropdown1" class="dropdown-content">
+    <li><a href="{% url 'myarticle' %}">我的文章</a></li>
+    <li><a class="modal-trigger" href="#modalchangopassword">修改密码</a>
+    <li><a href="{% url 'userlogout' %}">退出</a></li>
+</ul>
+<main>
+    {% block page-content %}
+    {% endblock %}
+</main>
+{#页脚#}
+<footer class="page-footer transparent">
+    <div class="footer-copyright grey lighten-2">
+        <div class="container grey-text text-darken-4">
+            © 2017 yangdi
+            <a class="grey-text text-darken-4 right modal-trigger" href="#">关于</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal Structure -->
+{#--登录#}
+<div id="modalLogin" class="modal">
+    <div class="modal-content">
+        <h4>登录</h4>
+        <div class="row mg-15">
+            <form class="col s12" action="{% url 'userlogin' %}" name="userlogin" method="post">
+                <div class="input-field col s12">
+                    <input id="UserName" name="UserName" type="text" class="validate">
+                    <label for="UserName">用户名</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="Password" name="Password" type="password" class="validate">
+                    <label for="Password">密码</label>
+                </div>
+                <div class="col s6">
+                    <button id="login" class="btn waves-effect waves-light submit" type="button" name="action">登录
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+                <div class="col s6 right-align">
+                    <a href="#modalRegister" class="modal-close modal-trigger">还没有账号,点击注册</a><br
+                        class="hide-on-large-only">
+                    {#                    <span class="hide-on-med-and-down">/</span>#}
+                    {#                    <a href="#modalPasswordRetrieval" class="modal-close modal-trigger">找回密码</a>#}
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="progress hide">
+        <div class="indeterminate"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="modal-action modal-close waves-effect waves-teal btn-flat">关闭</a>
+    </div>
+</div>
+{#--注册#}
+<div id="modalRegister" class="modal">
+    <div class="modal-content">
+        <h4>用户注册</h4>
+        <p>注册账号后，可以书写属于自己的文章</p>
+        <div class="row">
+            <form class="col s12" action="{% url 'regist' %}" name="regist" method="post">
+                <div class="input-field col s6">
+                    <input id="UserName1" name="UserName1" type="text" class="validate">
+                    <label for="UserName1">用户名</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="email1" name="email1" type="email" class="validate">
+                    <label for="email1" data-error="邮箱格式不正确" data-success="right">邮箱</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="Password1" name="Password1" type="password" class="validate">
+                    <label for="Password1">密码</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="RePassword1" name="RePassword1" type="password" class="validate">
+                    <label for="RePassword1">确认密码</label>
+                </div>
+                <div class="col s6">
+                    <button id="regist" class="btn waves-effect waves-light submit" type="button" name="action">注册
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+                <div class="col s6 right-align">
+                    <a href="#modalLogin" class="modal-close modal-trigger">返回登录</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="progress hide">
+        <div class="indeterminate"></div>
+    </div>
+</div>
+{#修改密码#}
+<div id="modalchangopassword" class="modal">
+    <div class="modal-content">
+        <h4>修改密码</h4>
+        <div class="row mg-15">
+            <form class="col s12" method="post">
+                <div class="input-field col s12">
+                    <input id="oldpassword" name="oldpassword" type="password" class="validate">
+                    <label for="oldpassword">旧密码</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="newpassword" name="newpassword" type="password" class="validate">
+                    <label for="newpassword">新密码</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="renewpassword" name="renewpassword" type="password" class="validate">
+                    <label for="renewpassword">新密码</label>
+                </div>
+                <div class="col s6">
+                    <button id="updatepassword" class="btn waves-effect waves-light submit" type="button" name="action">
+                        修改密码
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+                <div class="col s6 right-align">
+                    <a href="#modalRegister" class="modal-close modal-trigger">还没有账号,点击注册</a><br
+                        class="hide-on-large-only">
+                    {#                    <span class="hide-on-med-and-down">/</span>#}
+                    {#                    <a href="#modalPasswordRetrieval" class="modal-close modal-trigger">找回密码</a>#}
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="progress hide">
+        <div class="indeterminate"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="modal-action modal-close waves-effect waves-teal btn-flat">关闭</a>
+    </div>
+</div>
+</body>
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="{% static 'materialize/js/materialize.min.js' %}"></script>
+<script src="{% static 'ckeditor/ckeditor/plugins/prism/lib/prism/prism_patched.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/prism.css' %}">
+{#请求注册#}
+<script>
+    $(document).ready(function () {
+        $("#regist").click(function () {
+            var UserName = $("#UserName1").val();
+            var Password = $("#Password1").val();
+            var RePassword = $("#RePassword1").val();
+            var email = $("#email1").val();
+            $.ajax({
+                url: "/regist/",
+                type: "post",
+                dataType: "html",
+                data: {
+                    "UserName": UserName,
+                    "Password": Password,
+                    "RePassword": RePassword,
+                    "email": email
+                }
+            }).success(function (ret) {
+                if (ret == '注册成功!') {
+                    location.replace('/index/')
+                }
+                Materialize.toast(ret, 4000)
+            }).fail(function (ret) {
+                Materialize.toast('请求失败', 4000)
+            });
+        });
+    });
+</script>
+
+{#请求登录#}
+<script>
+    $(document).ready(function () {
+        $("#login").click(function () {
+            var uname = $("#UserName").val();
+            var psw = $("#Password").val();
+            $.ajax({
+                url: "/userlogin/",
+                type: "post",
+                dataType: "html",
+                data: {
+                    "uname": uname,
+                    "psw": psw
+                }
+            }).success(function (ret) {
+                if (ret == '登录成功!') {
+                    location.replace('/index/')
+                }
+                Materialize.toast(ret, 4000)
+            }).fail(function (ret) {
+                Materialize.toast('请求失败', 4000)
+            });
+        });
+    });
+</script>
+{#修改密码#}
+<script>
+    $(document).ready(function () {
+        $("#updatepassword").click(function () {
+            var oldpassword = $("#oldpassword").val();
+            var newpassword = $("#newpassword").val();
+            var renewpassword = $("#renewpassword").val();
+            $.ajax({
+                url: "/updateuserpassword/",
+                type: "post",
+                dataType: "html",
+                data: {
+                    "oldpassword": oldpassword,
+                    "newpassword": newpassword,
+                    "renewpassword": renewpassword
+                }
+            }).success(function (ret) {
+                if (ret == '修改成功!') {
+                    location.replace('/index/')
+                }
+                Materialize.toast(ret, 4000)
+            }).fail(function (ret) {
+                Materialize.toast('请求失败', 4000)
+            });
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        {#        模态#}
+        $('.modal').modal();
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.collapsible').collapsible();
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".button-collapse").sideNav();
+    });
+</script>
+{% block js %}
+{% endblock %}
+
+</html>
+        
