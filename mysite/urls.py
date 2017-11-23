@@ -17,12 +17,12 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from blog.views import *
-# from DjangoUeditor.forms import UEditorField
+from DjangoUeditor import urls as DjangoUeditor_urls
 from django.conf import settings
 from blog.views import *
 
 urlpatterns = [
-	url(r'ckeditor/', include('ckeditor_uploader.urls')),
+	url(r'^ueditor/', include('DjangoUeditor.urls')),
 	url(r'^admin/', admin.site.urls),
 	url(r'^$', index, name='index'),
 	url(r'^index/$', index, name='index'),

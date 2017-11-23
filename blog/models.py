@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from ckeditor_uploader.fields import RichTextUploadingField
+from DjangoUeditor.models import UEditorField
 
 
 # Create your models here.
@@ -31,8 +31,7 @@ class Article(models.Model):
 	# 文章标题
 	title = models.CharField(max_length=70, verbose_name="文章标题")
 	# 文章内容
-	body = RichTextUploadingField('文章内容', config_name='default',
-	                              blank=True)
+	body = UEditorField('文章内容', blank=True)
 	# 创建时间
 	created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 	# 修改时间

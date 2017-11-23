@@ -22,16 +22,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'f7+wr$q2$vu(0wskmy$n8vr+-rp2cs)h_u47yg+v)j6$cxd%$+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.123.89', '127.0.0.1', 'yangxiaodi.pythonanywhere.com']
 
 # Application definition
 
 INSTALLED_APPS = [
-	# 'DjangoUeditor',
-	'ckeditor',
-	'ckeditor_uploader',
+	'DjangoUeditor',
 	'django.contrib.admin',
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
@@ -119,65 +117,15 @@ DATETIME_FORMAT = 'Y-m-d H:i:s'
 DATE_FORMAT = 'Y-m-d'
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+# https://docs.djangoproject.com/en/1.8/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, './blog/static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'blog/static')
 
+# 公共的 static 文件，比如 jquery.js 可以放这里，这里面的文件夹不能包含 STATIC_ROOT
+STATICFILES_DIRS = (
+	os.path.join(BASE_DIR, "blog/common_static"),
+)
 
 # upload folder
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, './blog/media')
-CKEDITOR_UPLOAD_PATH = 'upload/'
-CKEDITOR_IMAGE_BACKEND = 'pillow'
-
-CKEDITOR_ALLOW_NONIMAGE_FILES = False  # 不允许非图片文件上传，默认为True
-CKEDITOR_BROWSE_SHOW_DIRS = True  # 在编辑器里浏览上传的图片时，图片会以路径分组，日期排序
-CKEDITOR_RESTRICT_BY_USER = True  # 限制用户浏览图片的权限，只能浏览自己上传的图片，图片会传到以用户名命名的文件夹下，超级管理员依旧可以看所有图片
-
-CKEDITOR_CONFIGS = {
-	'default': {
-		'language': 'zh-cn',
-		'skin': 'moono-lisa',
-		# 'skin': 'office2013',
-		'toolbar_Basic': [
-			['Source', '-', 'Bold', 'Italic']
-		],
-		'toolbar_YourCustomToolbarConfig': [
-			{'name': 'document', 'items': ['Source', '-', 'Save', 'Preview', '-', 'Undo', 'Redo']},
-			{'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord']},
-			{'name': 'insert',
-			 'items': ['Image', 'Table', 'HorizontalRule', 'Smiley']},
-			{'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
-			{'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
-			{'name': 'paragraph',
-			 'items': ['-', 'Blockquote', '-',
-			           'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
-			'/',
-			{'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
-			{'name': 'colors', 'items': ['TextColor', 'BGColor']},
-			{'name': 'basicstyles',
-			 'items': ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat', 'NumberedList', 'BulletedList',
-			           '-', 'Outdent', 'Indent', 'CodeSnippet']},
-		],
-		'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
-		'tabSpaces': 4,
-		'extraPlugins': ','.join([
-			'uploadimage',  # the upload image feature
-			'div',
-			'autolink',
-			'autoembed',
-			'embedsemantic',
-			'autogrow',
-			'widget',
-			'lineutils',
-			'clipboard',
-			'dialog',
-			'dialogui',
-			'elementspath',
-			'codesnippet',
-			'prism',
-		]),
-	}
-}
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

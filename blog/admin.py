@@ -41,5 +41,5 @@ class ArticleAdmin(admin.ModelAdmin):
 	date_hierarchy = 'modified_time'  # 详细时间分层筛选
 
 
-admin.site.site_header = "Yangxiaodi'Blog"
-admin.site.site_title = "Yangxiaodi'Blog"
+admin.site.site_header = "YangDi.FUN"
+admin.site.site_title = "YangDi.Fun"

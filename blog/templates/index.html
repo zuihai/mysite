@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 {#{% load pagetag %}#}
+{% load static %}
 {% block title %}
     首页--YangXiaoDi's Blog
+{% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'ueditor/third-party/SyntaxHighlighter/shCore.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'ueditor/third-party/SyntaxHighlighter/shCoreDefault.css' %}">
+
 {% endblock %}
 {% block page-content %}
 
@@ -76,6 +83,7 @@
                         <div class="card-action">
                             <a href="{% url 'articledetail' x.id %}">阅读全文</a>
                             <a href="#">{{ x.modified_time|date:"Y-m-d H:i" }}</a>
+                            <a href="#">作者:{{ x.author }}</a>
                         </div>
                     </div>
                 </div>
@@ -109,4 +117,9 @@
         </div>
         <div class="col s12 m2 l2"></div>
     </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
 {% endblock %}

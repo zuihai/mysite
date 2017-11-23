@@ -3,6 +3,11 @@
 {% block title %}
     {{ article.title }}
 {% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'ueditor/ueditor.config.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ueditor/ueditor.all.min.js' %}"></script>
+{% endblock %}
 {% block page-content %}
     <form action="{% url 'addarticlesave' %}" name="addarticlesave" method='post'>
         <div class="row">
@@ -20,10 +25,7 @@
             </div>
             <div class="col s12 m8 l8">
                 <label>文章内容:</label>
-                <textarea id="article_body" name="editor1" class="ckeditor"></textarea>
-                <script type="text/javascript">CKEDITOR.replace('editor', {
-                    customConfig: ''
-                });</script>
+                <textarea id="article_body"  name="article_body" rows="10" cols="80"></textarea>
             </div>
         </div>
         <div class="row">
@@ -85,10 +87,17 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
-    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
-    <script src="{% static 'ckeditor/ckeditor/plugins/prism/lib/prism/prism_patched.min.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/prism.css' %}">
+    <script type="text/javascript">
+
+        var id_body = UE.getEditor('article_body', {
+            'initialFrameHeight': 400,
+            'serverUrl': '/ueditor/controller/?filePathFormat=&imagePathFormat=',
+            'initialFrameWidth': 800
+        });
+        article_body.ready(function () {
+
+        });
+    </script>
     <script type="text/javascript">
         $('.chips-placeholder').material_chip({
             placeholder: 'Enter a tag',
@@ -99,7 +108,7 @@
         $(document).ready(function () {
             $("#save_article").click(function () {
                 var title = $("#article_title").val();
-                var body = CKEDITOR.instances['article_body'].getData();
+                var body = UE.getEditor('article_body').getContent();
                 var category = $('input:radio[name=category]:checked').val();
                 var tag = $('.chips-placeholder').material_chip('data');
                 var x;

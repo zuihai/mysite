@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
     {{ article.title }}
+{% endblock %}
+{% block head %}
+    <script type="text/javascript" src="{% static 'ueditor/third-party/SyntaxHighlighter/shCore.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'ueditor/third-party/SyntaxHighlighter/shCoreDefault.css' %}">
 {% endblock %}
 {% block page-content %}
     <div class="row">
@@ -36,7 +41,7 @@
                         <label for="email" data-error="email format is wrong" data-success="right">您的邮箱</label>
                     </div>
                     <div class="input-field">
-                        <textarea id="textarea1"  name="comment" class="materialize-textarea" length="400"></textarea>
+                        <textarea id="textarea1" name="comment" class="materialize-textarea" length="400"></textarea>
                         <label for="textarea1">您的内容</label>
                     </div>
                     <button class="btn waves-effect waves-light" type="submit" name="action">提交
@@ -48,4 +53,9 @@
         <div class="col s12 m2 l2"></div>
     </div>
 
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
 {% endblock %}
